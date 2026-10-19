@@ -1,0 +1,100 @@
+{
+  "entities": {
+    "UploadSession": {
+      "title": "UploadSession",
+      "description": "Customer upload session containing token number and customer metadata",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "tokenNumber": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "customerName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "orderNumber": {
+          "type": "string",
+          "maxLength": 50
+        },
+        "phoneNumber": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "printNotes": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "printing", "completed", "cancelled"]
+        },
+        "fileCount": {
+          "type": "number"
+        },
+        "totalSizeBytes": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "tokenNumber", "customerName", "status", "fileCount", "totalSizeBytes", "createdAt"]
+    },
+    "FileItem": {
+      "title": "FileItem",
+      "description": "Metadata for an uploaded customer file stored in Cloud Storage",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "sessionId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "originalName": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "mimeType": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "sizeBytes": {
+          "type": "number"
+        },
+        "storagePath": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "downloadUrl": {
+          "type": "string",
+          "maxLength": 2048
+        },
+        "uploadedAt": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "sessionId", "originalName", "mimeType", "sizeBytes", "storagePath", "uploadedAt"]
+    }
+  },
+  "firestore": {
+    "/sessions/{sessionId}": {
+      "schema": "UploadSession",
+      "description": "Collection of customer upload sessions for the shop desk"
+    },
+    "/sessions/{sessionId}/files/{fileId}": {
+      "schema": "FileItem",
+      "description": "Subcollection of files uploaded within a session"
+    }
+  }
+}

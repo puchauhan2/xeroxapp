@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="docGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f1f5f9" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)" />
+
+  <!-- Document Sheet -->
+  <g filter="url(#shadow)">
+    <path d="M 140 100 L 300 100 L 372 172 L 372 412 L 140 412 Z" fill="url(#docGrad)" rx="8" />
+    <!-- Folded Corner -->
+    <path d="M 300 100 L 300 172 L 372 172 Z" fill="#cbd5e1" />
+  </g>
+
+  <!-- QR Matrix Graphic inside Document -->
+  <g transform="translate(186, 210) scale(0.9)" fill="#1e293b">
+    <!-- QR Corner Top-Left -->
+    <rect x="0" y="0" width="48" height="48" rx="8" />
+    <rect x="10" y="10" width="28" height="28" fill="#ffffff" rx="4" />
+    <rect x="18" y="18" width="12" height="12" rx="2" fill="#1e3a8a" />
+
+    <!-- QR Corner Top-Right -->
+    <rect x="112" y="0" width="48" height="48" rx="8" />
+    <rect x="122" y="10" width="28" height="28" fill="#ffffff" rx="4" />
+    <rect x="130" y="18" width="12" height="12" rx="2" fill="#1e3a8a" />
+
+    <!-- QR Corner Bottom-Left -->
+    <rect x="0" y="112" width="48" height="48" rx="8" />
+    <rect x="10" y="122" width="28" height="28" fill="#ffffff" rx="4" />
+    <rect x="18" y="130" width="12" height="12" rx="2" fill="#1e3a8a" />
+
+    <!-- QR Matrix dots -->
+    <rect x="64" y="12" width="14" height="14" rx="3" />
+    <rect x="84" y="24" width="14" height="14" rx="3" />
+    <rect x="12" y="64" width="14" height="14" rx="3" />
+    <rect x="36" y="64" width="14" height="14" rx="3" />
+    <rect x="64" y="64" width="32" height="32" rx="6" fill="url(#accent)" />
+    <rect x="112" y="64" width="14" height="14" rx="3" />
+    <rect x="136" y="78" width="14" height="14" rx="3" />
+    <rect x="64" y="112" width="14" height="14" rx="3" />
+    <rect x="88" y="126" width="14" height="14" rx="3" />
+    <rect x="120" y="126" width="28" height="14" rx="3" />
+  </g>
+
+  <!-- Speed Upload Arrow Badge -->
+  <circle cx="360" cy="370" r="48" fill="url(#accent)" filter="url(#shadow)" />
+  <path d="M 360 342 L 380 366 L 368 366 L 368 396 L 352 396 L 352 366 L 340 366 Z" fill="#ffffff" />
+</svg>

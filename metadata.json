@@ -1,0 +1,6 @@
+{
+  "name": "DocuDrop India - Shop QR Document Print & Xerox Desk",
+  "description": "Fast, secure QR-code based customer document upload and print queue system for Indian photocopy shops, cyber cafés, and document centers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

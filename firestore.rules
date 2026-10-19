@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'puchauhan4@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidSession(data) {
+      return data.keys().hasAll(['id', 'tokenNumber', 'customerName', 'status', 'fileCount', 'totalSizeBytes', 'createdAt']) &&
+        data.id is string && data.id.size() <= 128 &&
+        data.tokenNumber is string && data.tokenNumber.size() <= 32 &&
+        data.customerName is string && data.customerName.size() > 0 && data.customerName.size() <= 100 &&
+        data.status in ['pending', 'printing', 'completed', 'cancelled'] &&
+        data.fileCount is number && data.fileCount >= 0 && data.fileCount <= 50 &&
+        data.totalSizeBytes is number && data.totalSizeBytes >= 0 &&
+        data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    function isValidFile(data, sessionId) {
+      return data.keys().hasAll(['id', 'sessionId', 'originalName', 'mimeType', 'sizeBytes', 'storagePath', 'uploadedAt']) &&
+        data.id is string && data.id.size() <= 128 &&
+        data.sessionId == sessionId &&
+        data.originalName is string && data.originalName.size() > 0 && data.originalName.size() <= 255 &&
+        data.mimeType is string && data.mimeType.size() <= 100 &&
+        data.sizeBytes is number && data.sizeBytes >= 0 &&
+        data.storagePath is string && data.storagePath.size() <= 500 &&
+        data.uploadedAt is string && data.uploadedAt.size() <= 64;
+    }
+
+    // Customer upload sessions
+    match /sessions/{sessionId} {
+      // Single session get allowed for receipt viewing; listing strictly restricted to authorized admin
+      allow get: if isValidId(sessionId);
+      allow list: if isAdmin();
+      allow create: if isValidId(sessionId) && request.resource.data.id == sessionId && isValidSession(request.resource.data);
+      allow update, delete: if isValidId(sessionId) && isAdmin();
+
+      // Files subcollection
+      match /files/{fileId} {
+        allow get: if isValidId(sessionId) && isValidId(fileId);
+        allow list: if isAdmin();
+        allow create: if isValidId(sessionId) && isValidId(fileId) && request.resource.data.id == fileId && isValidFile(request.resource.data, sessionId);
+        allow update, delete: if isValidId(sessionId) && isValidId(fileId) && isAdmin();
+      }
+    }
+
+    // Admins registry
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+  }
+}
